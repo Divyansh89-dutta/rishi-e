@@ -1,5 +1,6 @@
 // controllers/productController.js
 import Product from "../models/Prodect.js";
+import redisClient from "../utils/redisClient.js";
 
 // Create Product
 export const createProduct = async (req, res) => {
@@ -35,7 +36,6 @@ export const createProduct = async (req, res) => {
 // Get All Products
 export const getAllProducts = async (req, res) => {
   try {
-    const products = await Product.find().sort({ createdAt: -1 });
     res.status(200).json(products);
   } catch (err) {
     res.status(500).json({ message: "Fetching products failed", error: err.message });

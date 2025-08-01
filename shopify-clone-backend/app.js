@@ -12,6 +12,9 @@ import wishlistRoutes from "./routes/wishlistRoutes.js";
 import notificationRoutes from "./routes/notificationRoutes.js";
 import session from "express-session";
 import "./config/passport.js";
+import discountRoutes from "./routes/discountRoutes.js"
+import userRoutes from "./routes/userRoutes.js"
+import redisClient from "./utils/redisClient.js";
 
 dontenv.config();
 connectDB();
@@ -31,9 +34,10 @@ app.use(
   })
 );
 // Routes 
-// app.get("/", (req, res) => {
-//   res.send("API is running...");
-// });ss
+app.get("/", (req, res) => {
+  res.send("API is running...");
+});
+
 app.use("/api/auth", authRoutes);
 app.use("/api/products", productRoutes);
 app.use("/api/cart", cartRoutes);
@@ -42,5 +46,7 @@ app.use("/api/payments", paymentRoutes);
 app.use("/api/addresses", addressRoutes);
 app.use("/api/wishlist", wishlistRoutes);
 app.use("/api/notifications", notificationRoutes);
+app.use("/api/discounts", discountRoutes);
+app.use("/api/users", userRoutes);
 
 export default app;
