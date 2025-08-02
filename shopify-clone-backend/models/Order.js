@@ -20,6 +20,14 @@ const orderSchema = new mongoose.Schema(
         },
       },
     ],
+    isRead: {
+      type: Boolean,
+      default: false,
+    },
+    isCleared: {
+      type: Boolean,
+      default: false,
+    },
     shippingAddress: {
       fullName: String,
       address: String,
