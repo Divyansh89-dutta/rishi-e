@@ -1,14 +1,17 @@
-// models/Notification.js
 import mongoose from "mongoose";
 
 const notificationSchema = new mongoose.Schema(
   {
     to: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
     from: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
-    type: { type: String, required: true }, // e.g. "order", "discount"
-    message: { type: String },
+    type: {
+      type: String,
+      required: true,
+      enum: ["order", "message", "promo", "system"], // ✅ Add valid types here
+    },
+    message: { type: String, required: true },
+    data: { type: Object }, // optional payload
     isRead: { type: Boolean, default: false },
-    data: { type: Object },
   },
   { timestamps: true }
 );

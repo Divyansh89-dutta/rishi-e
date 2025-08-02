@@ -2,30 +2,20 @@ import Order from "../models/Order.js";
 import { emitNotification } from "../utils/emitNotification.js";
 import { sendOrderConfirmationEmail } from "../utils/emailSender.js";
 import { applyDiscountCodeInternally, markCodeUsed } from "../utils/discountUtils.js";
+import { getIO } from "../utils/socket.js";
+import { sendOrderConfirmation } from "../utils/emailService.js";
+
 // ✅ Create Order
 export const createOrder = async (req, res) => {
-  let { items, shippingAddress, paymentMethod, totalAmount, discountCode } = req.body;
+  const { items, shippingAddress, paymentMethod, totalAmount } = req.body;
 
   if (!items || items.length === 0) {
     return res.status(400).json({ message: "No order items" });
   }
 
   try {
-    if (discountCode) {
-      const { discountPercent, error } = await applyDiscountCodeInternally(discountCode, req.user._id);
-
-      if (error) {
-        return res.status(400).json({ message: error });
-      }
-
-      const discountAmount = (discountPercent / 100) * totalAmount;
-      totalAmount = totalAmount - discountAmount;
-
-      await markCodeUsed(discountCode, req.user._id);
-    }
-
     const order = new Order({
-      user: req.user._id,
+      user: req.user._id, // ⬅️ Comes from `protect` middleware
       items,
       shippingAddress,
       paymentMethod,
@@ -33,24 +23,9 @@ export const createOrder = async (req, res) => {
     });
 
     const savedOrder = await order.save();
-
-    await sendOrderConfirmationEmail(req.user.email, savedOrder);
-
-    await emitNotification({
-      io: global.io,
-      to: req.user._id,
-      from: req.user._id,
-      type: "order",
-      message: "Your order has been placed successfully!",
-      data: { orderId: savedOrder._id },
-    });
-
     res.status(201).json(savedOrder);
   } catch (error) {
-    res.status(500).json({
-      message: "Failed to create order",
-      error: error.message,
-    });
+    res.status(500).json({ message: "Failed to create order", error: error.message });
   }
 };
 

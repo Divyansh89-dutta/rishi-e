@@ -1,6 +1,7 @@
 import express from "express";
-import cors from "cors";
 import dontenv from "dotenv";
+import cors from "cors";
+import { connectRedis } from "./utils/redisClient.js";
 import connectDB from "./config/db.js";
 import authRoutes from "./routes/authRoutes.js"
 import productRoutes from "./routes/productRoutes.js";
@@ -14,11 +15,10 @@ import session from "express-session";
 import "./config/passport.js";
 import discountRoutes from "./routes/discountRoutes.js"
 import userRoutes from "./routes/userRoutes.js"
-import redisClient from "./utils/redisClient.js";
 
 dontenv.config();
-connectDB();
-
+await connectDB();
+await connectRedis();
 const app = express();
 
 // MIDDLEWARES
