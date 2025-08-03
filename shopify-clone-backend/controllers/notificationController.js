@@ -58,7 +58,14 @@ export const markNotificationRead = async (req, res) => {
 // ✅ Mark All as Read
 export const markAllAsRead = async (req, res) => {
   try {
-    await Notification.updateMany({ to: req.user._id, isRead: false }, { isRead: true });
+    if (req.user.role === "admin") {
+      // Mark all admin notifications as read
+      await Notification.updateMany({ to: "admin", isRead: false }, { $set: { isRead: true } });
+    } else {
+      // Mark all user-specific notifications as read
+      await Notification.updateMany({ to: req.user._id, isRead: false }, { $set: { isRead: true } });
+    }
+
     res.status(200).json({ message: "All notifications marked as read" });
   } catch (error) {
     res.status(500).json({ error: error.message });

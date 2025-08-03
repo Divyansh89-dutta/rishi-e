@@ -5,7 +5,6 @@ import { initSocket } from "./utils/socket.js";
 const PORT = process.env.PORT || 5000;
 
 const server = http.createServer(app);
-
 initSocket(server);
 
 server.listen(PORT, () => {

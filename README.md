@@ -107,3 +107,63 @@ EMAIL_PASS=your-app-password
 GOOGLE_CLIENT_ID=your-google-client-id
 GOOGLE_CLIENT_SECRET=your-google-client-secret
 
+🛒 ✅ Shopify Clone Backend Completion Checklist
+✅ Authentication
+ JWT Auth for Users/Admins
+
+ Google OAuth + Auto User Creation
+
+✅ Products
+ Product CRUD (with Cloudinary image uploads)
+
+ Brand/Category Filtering
+
+ Search by Name
+
+ Redis Caching for Fast Listing
+
+ Stock Management (auto-update after order)
+
+✅ Cart & Orders
+ Add to Cart (Session/User-based)
+
+ Place Order (with shipping, payment, cartItems)
+
+ Reduce stock on purchase
+
+ Order History (User)
+
+ Admin can view & mark orders as read/processed
+
+ Auto-email to User after 30 min: "Order Shipped"
+
+ Real-time Admin notification on order placed
+
+✅ Payment
+ PayPal Integration (order placement + success)
+
+✅ Wishlist & Discounts
+ Add/Remove Wishlist
+
+ Discount Code Logic (optional)
+
+✅ Live Chat
+ Socket.IO live chat between Admin & User
+
+ Chat stored in MongoDB
+
+ Realtime updates
+
+✅ Notifications
+ MongoDB-based notifications system
+
+ Realtime toasts using Socket.IO
+
+✅ Email System
+ Nodemailer Setup
+
+ Email on Order Confirmed
+
+ Auto-email after 30 mins (using setTimeout)
+
+ ✅ Forgot Password with Email Reset

@@ -1,13 +1,15 @@
 import express from "express";
 import passport from "passport";
 import jwt from "jsonwebtoken";
-import { register, login } from "../controllers/authController.js";
+import { register, login, forgotPassword, resetPassword } from "../controllers/authController.js";
 
 const router = express.Router();
 
 // Normal Auth
 router.post("/register", register);
 router.post("/login", login);
+router.post("/forgot-password", forgotPassword);
+router.post("/reset-password/:token", resetPassword);
 
 // Google OAuth
 router.get("/google", passport.authenticate("google", { scope: ["profile", "email"] }));

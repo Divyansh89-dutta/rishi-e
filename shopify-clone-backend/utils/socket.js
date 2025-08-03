@@ -13,20 +13,31 @@ export const initSocket = (server) => {
   global.io = io; // make it globally accessible
 
   io.on("connection", (socket) => {
-    console.log("🟢 New user connected:", socket.id);
+    console.log("New user connected:", socket.id);
 
-    socket.on("join", (userId) => {
-      socket.join(userId);
-      console.log(`User ${userId} joined room`);
+    socket.on("joinRoom", (data) => {
+      const { role, userId } = data;
+
+      if (role === "admin") {
+        socket.join("admin");
+        console.log(`Admin joined room: admin`)
+      } else {
+        socket.join(userId);
+        console.log(`User ${userId} joined room`);
+      }
     });
 
     socket.on("sendMessage", async ({ sender, receiver, message, orderId }) => {
-      const chat = await Chat.create({ sender, receiver, message, orderId });
-      io.to(receiver).emit("receiveMessage", chat); // Real-time delivery
+     try {
+        const chat = await Chat.create({ sender, receiver, message, orderId });
+        io.to(receiver).emit("receiveMessage", chat); // Real-time delivery to receiver
+      } catch (err) {
+        console.error("Error sending message:", err.message);
+      }
     });
 
     socket.on("disconnect", () => {
-      console.log("🔴 User disconnected:", socket.id);
+      console.log("User disconnected:", socket.id);
     });
   });
 
