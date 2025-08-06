@@ -1,3 +1,4 @@
+// routes/authRoutes.js
 import express from "express";
 import passport from "passport";
 import jwt from "jsonwebtoken";
@@ -5,7 +6,7 @@ import { register, login, forgotPassword, resetPassword } from "../controllers/a
 
 const router = express.Router();
 
-// Normal Auth
+// Basic Auth
 router.post("/register", register);
 router.post("/login", login);
 router.post("/forgot-password", forgotPassword);
@@ -18,11 +19,9 @@ router.get(
   "/google/callback",
   passport.authenticate("google", { session: false, failureRedirect: "/" }),
   (req, res) => {
-    const token = jwt.sign({ id: req.user._id }, process.env.JWT_SECRET, {
-      expiresIn: "30d",
-    });
+    const token = jwt.sign({ id: req.user._id }, process.env.JWT_SECRET, { expiresIn: "30d" });
 
-    // Redirect to frontend with JWT token
+    // redirect to frontend with JWT token
     res.redirect(`${process.env.CLIENT_URL}/oauth-success?token=${token}`);
   }
 );

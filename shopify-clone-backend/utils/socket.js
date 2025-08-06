@@ -5,7 +5,7 @@ let io;
 export const initSocket = (server) => {
   io = new Server(server, {
     cors: {
-      origin: "*", // You can restrict this to your frontend URL
+      origin: process.env.CLIENT_URL, // You can restrict this to your frontend URL
       methods: ["GET", "POST"],
     },
   });

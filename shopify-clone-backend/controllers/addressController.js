@@ -1,7 +1,5 @@
-// controllers/addressController.js
 import Address from "../models/Adderss.js";
 
-// Get all addresses for the logged-in user
 export const getMyAddresses = async (req, res) => {
   try {
     const addresses = await Address.find({ user: req.user._id });
@@ -11,12 +9,10 @@ export const getMyAddresses = async (req, res) => {
   }
 };
 
-// Add a new address
 export const addAddress = async (req, res) => {
   const { fullName, addressLine, city, postalCode, country, phone, isDefault } = req.body;
 
   try {
-    // If isDefault is true, set all other addresses as not default
     if (isDefault) {
       await Address.updateMany({ user: req.user._id }, { isDefault: false });
     }
@@ -38,7 +34,6 @@ export const addAddress = async (req, res) => {
   }
 };
 
-// Update an address by ID
 export const updateAddress = async (req, res) => {
   try {
     const address = await Address.findById(req.params.id);
@@ -47,7 +42,6 @@ export const updateAddress = async (req, res) => {
       return res.status(404).json({ message: "Address not found or unauthorized" });
     }
 
-    // If making this address the default, unset all others
     if (req.body.isDefault) {
       await Address.updateMany({ user: req.user._id }, { isDefault: false });
     }
@@ -61,7 +55,6 @@ export const updateAddress = async (req, res) => {
   }
 };
 
-// Delete an address
 export const deleteAddress = async (req, res) => {
   try {
     const address = await Address.findById(req.params.id);

@@ -18,7 +18,7 @@ const addressSchema = new mongoose.Schema(
     city: String,
     postalCode: String,
     country: String,
-    phone: String,
+    phone: String, //(+91),(+212)
     isDefault: {
       type: Boolean,
       default: false,
