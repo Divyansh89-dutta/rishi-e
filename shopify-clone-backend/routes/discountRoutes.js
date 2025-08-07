@@ -1,4 +1,3 @@
-// routes/discountRoutes.js
 import express from "express";
 import { protect, adminOnly } from "../middlewares/authMiddleware.js";
 import Discount from "../models/Discount.js";

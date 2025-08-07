@@ -1,4 +1,4 @@
-import Address from "../models/Adderss.js";
+import Address from "../models/Address.js";
 
 export const getMyAddresses = async (req, res) => {
   try {

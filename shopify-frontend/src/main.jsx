@@ -5,11 +5,11 @@ import { BrowserRouter } from "react-router-dom";
 import { AuthProvider } from "./context/AuthContext";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 
-const GOOGLE_CLIENT_ID = "997926714680-1k3nrpr3quj3khr0cvaan66ia0buucmt.apps.googleusercontent.com"; // Replace this
+// const GOOGLE_CLIENT_ID = "356742496510-qe42gdc4j8g0cfpjil0adlkla2q7tl3q.apps.googleusercontent.com"; // Replace this
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
+    <GoogleOAuthProvider clientId="356742496510-qe42gdc4j8g0cfpjil0adlkla2q7tl3q.apps.googleusercontent.com">
       <BrowserRouter>
         <AuthProvider>
           <App />

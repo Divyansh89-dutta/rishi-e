@@ -24,7 +24,7 @@ const orderSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
-    isCleared: {
+    isCleared:{
       type: Boolean,
       default: false,
     },

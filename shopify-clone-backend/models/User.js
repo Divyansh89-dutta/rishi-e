@@ -17,12 +17,11 @@ const userSchema = new mongoose.Schema(
     password: {
       type: String,
       required: function () {
-        // Only require password if user is not registered via Google
         return !this.googleId;
       },
     },
     googleId: {
-      type: String, // Added to support OAuth
+      type: String, //added to support Oauth
     },
     avatar: {
       public_id: String,
@@ -33,9 +32,9 @@ const userSchema = new mongoose.Schema(
       enum: ["user", "admin"],
       default: "user",
     },
-    wishlist: [{ type: mongoose.Schema.Types.ObjectId, ref: "Product" }],
+    wishList: [{ type: mongoose.Schema.Types.ObjectId, ref: "Product" }],
     address: {
-      street: String,
+      Street: String,
       city: String,
       state: String,
       zip: String,
