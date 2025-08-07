@@ -5,53 +5,60 @@ import { GoogleLogin } from "@react-oauth/google";
 import { jwtDecode } from "jwt-decode";
 
 export default function Register() {
-  const { register } = useAuth();
+  const { login } = useAuth(); // login instead of register to store token + user
+  const navigate = useNavigate();
+
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [err, setErr] = useState("");
-  const navigate = useNavigate();
+  const [error, setError] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setError("");
     try {
-      await register(name, email, password);
+      const res = await fetch("http://localhost:5000/api/auth/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, email, password }),
+      });
+
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.message || "Registration failed");
+
+      login(data); // Store user and token in context/localStorage
       navigate("/");
-    } catch (error) {
-      setErr(error?.response?.data?.message || "Registration failed");
+    } catch (err) {
+      setError(err.message || "Something went wrong");
     }
   };
 
   const handleGoogleLoginSuccess = async (credentialResponse) => {
     try {
       const decoded = jwtDecode(credentialResponse.credential);
-      const { name, email } = decoded;
+      const { name, email, picture } = decoded;
 
-      // You can either:
-      // 1. Auto-register this user (if not already in DB), or
-      // 2. Call your backend Google login endpoint (preferred)
-
-      const res = await fetch("http://localhost:5000/api/auth/google", {
+      const res = await fetch("http://localhost:5000/api/auth/google-login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        credentials: "include",
-        body: JSON.stringify({ name, email }),
+        body: JSON.stringify({ name, email, picture }),
       });
 
       const data = await res.json();
       if (!res.ok) throw new Error(data.message || "Google login failed");
 
-      localStorage.setItem("shopify-user", JSON.stringify(data.user));
+      login(data); // Store user and token
       navigate("/");
-    } catch (error) {
-      setErr(error.message);
+    } catch (err) {
+      setError(err.message || "Google login error");
     }
   };
 
   return (
     <div className="max-w-md mx-auto p-6">
       <h2 className="text-2xl font-bold mb-4">Register</h2>
-      {err && <p className="text-red-500">{err}</p>}
+      {error && <p className="text-red-500 mb-4">{error}</p>}
+
       <form onSubmit={handleSubmit} className="space-y-4">
         <input
           type="text"
@@ -59,6 +66,7 @@ export default function Register() {
           className="w-full border p-2"
           value={name}
           onChange={(e) => setName(e.target.value)}
+          required
         />
         <input
           type="email"
@@ -66,6 +74,7 @@ export default function Register() {
           className="w-full border p-2"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
+          required
         />
         <input
           type="password"
@@ -73,8 +82,9 @@ export default function Register() {
           className="w-full border p-2"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
+          required
         />
-        <button className="w-full bg-green-600 text-white py-2">
+        <button type="submit" className="w-full bg-green-600 text-white py-2">
           Register
         </button>
       </form>
@@ -83,7 +93,7 @@ export default function Register() {
 
       <GoogleLogin
         onSuccess={handleGoogleLoginSuccess}
-        onError={() => setErr("Google Sign-In failed")}
+        onError={() => setError("Google login failed")}
       />
     </div>
   );

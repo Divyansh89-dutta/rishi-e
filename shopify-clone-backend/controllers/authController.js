@@ -85,7 +85,7 @@ export const googleLogin = async (req, res) => {
         email,
         avatar: { url: picture },
         authType: "google",
-        password: null, // google users don't need a password
+        password: null,
       });
     }
 
