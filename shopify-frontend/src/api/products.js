@@ -1,16 +1,18 @@
 import axios from "./axios";
 
-// Get all products (with optional filters/query)
+// Get all products
 export const getAllProducts = async (query = "") => {
   const res = await axios.get(`/products${query}`);
   return res.data;
 };
 
-// Get a single product by ID or slug
+// Get a single product
 export const getProductById = async (id) => {
   const res = await axios.get(`/products/${id}`);
+  console.log("Fetched product detail:", res.data); // ✅ log this!
   return res.data;
 };
+
 
 // Admin: Create product
 export const createProduct = async (productData) => {
