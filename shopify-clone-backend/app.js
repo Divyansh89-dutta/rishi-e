@@ -15,6 +15,7 @@ import session from "express-session";
 import "./config/passport.js";
 import discountRoutes from "./routes/discountRoutes.js"
 import userRoutes from "./routes/userRoutes.js"
+import cookieParser from "cookie-parser";
 
 dontenv.config();
 await connectDB();
@@ -23,6 +24,7 @@ const app = express();
 
 // MIDDLEWARES
 app.use(cors());
+app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 

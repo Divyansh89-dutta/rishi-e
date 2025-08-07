@@ -5,8 +5,8 @@ let io;
 export const initSocket = (server) => {
   io = new Server(server, {
     cors: {
-      origin: process.env.CLIENT_URL, // You can restrict this to your frontend URL
-      methods: ["GET", "POST"],
+      origin: process.env.CLIENT_URL,
+      credentials: true
     },
   });
 
@@ -28,7 +28,7 @@ export const initSocket = (server) => {
     });
 
     socket.on("sendMessage", async ({ sender, receiver, message, orderId }) => {
-     try {
+      try {
         const chat = await Chat.create({ sender, receiver, message, orderId });
         io.to(receiver).emit("receiveMessage", chat); // Real-time delivery to receiver
       } catch (err) {
